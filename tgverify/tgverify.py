@@ -100,19 +100,19 @@ class TGverify(BaseCog):
             if min_living_minutes is None:
                 await self.config.guild(ctx.guild).min_living_minutes.set(0)
                 await ctx.send(
-                    f"Minimum living minutes required for verification removed!"
+                    f"Минимальное количество прожитых минут, необходимое для верификации убрано!"
                 )
             else:
                 await self.config.guild(ctx.guild).min_living_minutes.set(
                     min_living_minutes
                 )
                 await ctx.send(
-                    f"Minimum living minutes required for verification set to: `{min_living_minutes}`"
+                    f"Минимальное количество минут жизни, необходимое для верификации, установлено на: `{min_living_minutes}`"
                 )
 
         except (ValueError, KeyError, AttributeError):
             await ctx.send(
-                "There was a problem setting the minimum required living minutes"
+                "Возникла проблема с установкой минимально необходимого количества минут жизни"
             )
 
     @config.command()
@@ -122,10 +122,10 @@ class TGverify(BaseCog):
         """
         try:
             await self.config.guild(ctx.guild).instructions_link.set(instruction_link)
-            await ctx.send(f"Instruction link set to: `{instruction_link}`")
+            await ctx.send(f"Ссылка на инструкцию установлена на: `{instruction_link}`")
 
         except (ValueError, KeyError, AttributeError):
-            await ctx.send("There was a problem setting the instructions link")
+            await ctx.send("Возникла проблема с установкой ссылки на инструкции")
 
     @config.command()
     async def welcome_channel(self, ctx, channel: discord.TextChannel):
@@ -138,14 +138,14 @@ class TGverify(BaseCog):
         if channel is None:
             channel = ctx.message.channel
         if not channel.permissions_for(ctx.me).send_messages:
-            msg = "I do not have permissions to send messages to {channel}".format(
+            msg = "У меня нет прав на отправку сообщений в {channel}".format(
                 channel=channel.mention
             )
             await ctx.send(msg)
             return
         guild_settings = channel.id
         await self.config.guild(guild).welcomechannel.set(guild_settings)
-        msg = "I will now send welcome messages to {channel}".format(
+        msg = "Теперь я буду отправлять приветственные сообщения в {channel}".format(
             channel=channel.mention
         )
         await channel.send(msg)
@@ -157,10 +157,10 @@ class TGverify(BaseCog):
         """
         try:
             await self.config.guild(ctx.guild).welcomegreeting.set(welcomegreeting)
-            await ctx.send(f"Welcome greeting set to: `{welcomegreeting}`")
+            await ctx.send(f"Приветствие настроено на: `{welcomegreeting}`")
 
         except (ValueError, KeyError, AttributeError):
-            await ctx.send("There was a problem setting the Welcome greeting")
+            await ctx.send("Возникла проблема с установкой приветствия")
 
     @config.command()
     async def disabled_greeting(self, ctx, disabledgreeting: str):
@@ -169,10 +169,10 @@ class TGverify(BaseCog):
         """
         try:
             await self.config.guild(ctx.guild).disabledgreeting.set(disabledgreeting)
-            await ctx.send(f"Disabled greeting set to: `{disabledgreeting}`")
+            await ctx.send(f"Отключено приветствие, установленное на: `{disabledgreeting}`")
 
         except (ValueError, KeyError, AttributeError):
-            await ctx.send("There was a problem setting the disabled greeting")
+            await ctx.send("Возникла проблема с установкой отключения приветствия")
 
     @config.command()
     async def bunker_warning(self, ctx, bunkerwarning: str):
@@ -181,10 +181,10 @@ class TGverify(BaseCog):
         """
         try:
             await self.config.guild(ctx.guild).bunkerwarning.set(bunkerwarning)
-            await ctx.send(f"Bunker warning set to: `{bunkerwarning}`")
+            await ctx.send(f"Предупреждение бункера установлено на: `{bunkerwarning}`")
 
         except (ValueError, KeyError, AttributeError):
-            await ctx.send("There was a problem setting the bunker warning")
+            await ctx.send("Проблема с установкой предупреждения бункера")
 
     @tgverify.command()
     async def bunker(self, ctx):
@@ -196,12 +196,12 @@ class TGverify(BaseCog):
             bunker = not bunker
             await self.config.guild(ctx.guild).bunker.set(bunker)
             if bunker:
-                await ctx.send(f"The bunker warning is now on")
+                await ctx.send(f"Предупреждение бункера ВКЛ")
             else:
-                await ctx.send(f"The bunker warning is now off")
+                await ctx.send(f"Предупреждение бункера ВЫКЛ")
 
         except (ValueError, KeyError, AttributeError):
-            await ctx.send("There was a problem toggling the bunker")
+            await ctx.send("Проблема с переключением предупреждения бункера")
 
     @tgverify.command()
     async def broken(self, ctx):
@@ -213,12 +213,12 @@ class TGverify(BaseCog):
             disabled = not disabled
             await self.config.guild(ctx.guild).disabled.set(disabled)
             if disabled:
-                await ctx.send(f"The verification system is now off")
+                await ctx.send(f"Система верификации теперь ВЫКЛ")
             else:
-                await ctx.send(f"The verification system is now on")
+                await ctx.send(f"Система верификации теперь ВКЛ")
 
         except (ValueError, KeyError, AttributeError):
-            await ctx.send("There was a problem toggling the disabled flag")
+            await ctx.send("Возникла проблема с переключением флага отключения системы верификации")
 
     @config.command()
     async def verified_role(self, ctx, verified_role: int = None):
@@ -228,18 +228,18 @@ class TGverify(BaseCog):
         try:
             role = ctx.guild.get_role(verified_role)
             if not role:
-                return await ctx.send(f"This is not a valid role for this discord!")
+                return await ctx.send(f"Это неподходящая или недопустимая роль для этого дискорда!")
             if verified_role is None:
                 await self.config.guild(ctx.guild).verified_role.set(None)
-                await ctx.send(f"No role will be set when the user verifies!")
+                await ctx.send(f"При верификации пользователя роль не будет установлена!")
             else:
                 await self.config.guild(ctx.guild).verified_role.set(verified_role)
                 await ctx.send(
-                    f"When a user meets minimum verification this role will be applied: `{verified_role}`"
+                    f"Когда пользователь соответствует минимальной проверке, эта роль будет применена: `{verified_role}`"
                 )
 
         except (ValueError, KeyError, AttributeError):
-            await ctx.send("There was a problem setting the verified role")
+            await ctx.send("Возникла проблема с установкой верифицированной роли")
 
     @config.command()
     async def verified_living_role(self, ctx, verified_living_role: int = None):
@@ -249,20 +249,20 @@ class TGverify(BaseCog):
         try:
             role = ctx.guild.get_role(verified_living_role)
             if not role:
-                return await ctx.send(f"This is not a valid role for this discord!")
+                return await ctx.send(f"Это неподходящая или недопустимая роль для этого дискорда!")
             if verified_living_role is None:
                 await self.config.guild(ctx.guild).verified_living_role.set(None)
-                await ctx.send(f"No role will be set when the user verifies!")
+                await ctx.send(f"При верификации пользователя роль не будет установлена!")
             else:
                 await self.config.guild(ctx.guild).verified_living_role.set(
                     verified_living_role
                 )
                 await ctx.send(
-                    f"When a user meets minimum verification this role will be applied: `{verified_living_role}`"
+                    f"Когда пользователь соответствует минимальной проверке, эта роль будет применена: `{verified_living_role}`"
                 )
 
         except (ValueError, KeyError, AttributeError):
-            await ctx.send("There was a problem setting the verified role")
+            await ctx.send("Возникла проблема с установкой верифицированной роли")
 
     @tgverify.command()
     async def discords(self, ctx, ckey: str):
@@ -271,21 +271,21 @@ class TGverify(BaseCog):
         """
         tgdb = self.get_tgdb()
         ckey = normalise_to_ckey(ckey)
-        message = await ctx.send("Collecting discord accounts for ckey....")
+        message = await ctx.send("Собираем дискорд-аккаунты привязанные к этому ckey....")
         async with ctx.typing():
             embed = discord.Embed(color=await ctx.embed_color())
             embed.set_author(
-                name=f"Discord accounts historically linked to {str(ckey).title()}"
+                name=f"Дискорд-аккаунты привязанные к {str(ckey).title()}"
             )
             links = await tgdb.all_discord_links_for_ckey(ctx, ckey)
             if len(links) <= 0:
                 return await message.edit(
-                    content="No discord accounts found for this ckey"
+                    content="Не найдено привязанных дискорд-аккаунтов к этому ckey"
                 )
 
             names = ""
             for link in links:
-                names += f"User linked <@{link.discord_id}> on {link.timestamp}, current account: {link.validity}\n"
+                names += f"Пользователь привязан <@{link.discord_id}> на {link.timestamp}, текущий аккаунт: {link.validity}\n"
 
             embed.add_field(name="__Discord accounts__", value=names, inline=False)
             await message.edit(content=None, embed=embed)
@@ -297,17 +297,17 @@ class TGverify(BaseCog):
         """
         tgdb = self.get_tgdb()
 
-        message = await ctx.send("Finding out the ckey of user....")
+        message = await ctx.send("Начинаем поиск по ckey пользователя....")
         async with ctx.typing():
             # Attempt to find the discord ids based on the one time token passed in.
             discord_link = await tgdb.discord_link_for_discord_id(ctx, discord_user.id)
             if discord_link:
                 message = await message.edit(
-                    content=f"This discord user is linked to the ckey {discord_link.ckey}"
+                    content=f"Этот пользователь привязан к этому ckey {discord_link.ckey}"
                 )
             else:
                 message = await message.edit(
-                    content=f"This discord user has no ckey linked"
+                    content=f"У пользователя нету привязанных ckey"
                 )
 
     @tgverify.command()
@@ -318,7 +318,7 @@ class TGverify(BaseCog):
         """
         tgdb = self.get_tgdb()
 
-        message = await ctx.send("Finding out the ckey of user....")
+        message = await ctx.send("Начинаем поиск по ckey пользователя....")
         async with ctx.typing():
             # Attempt to find the discord link from the user
             discord_link = await tgdb.discord_link_for_discord_id(ctx, discord_user.id)
@@ -327,10 +327,10 @@ class TGverify(BaseCog):
                 await tgdb.clear_all_valid_discord_links_for_ckey(
                     ctx, discord_link.ckey
                 )
-                message = await message.edit(content=f"User has been devalidated")
+                message = await message.edit(content=f"Пользователь деверифицирован")
             else:
                 message = await message.edit(
-                    content=f"This discord user has no ckey linked"
+                    content=f"У пользователя нету привязанных ckey"
                 )
 
     # Now the only user facing command, so this has rate limiting across the sky
@@ -361,21 +361,21 @@ class TGverify(BaseCog):
             await ctx.message.delete()
         except (discord.DiscordException):
             await ctx.send(
-                "I do not have the required permissions to delete messages, please remove/edit the one time token manually."
+                "У меня нет необходимых прав для удаления сообщений, пожалуйста, удалите/отредактируйте одноразовый/временный токен вручную."
             )
         if not role:
             raise TGUnrecoverableError(
-                "No verification role is configured, configure it with the config command"
+                "Роль проверки не настроена, настройте её с помощью конфига"
             )
         if not verified_role:
             raise TGUnrecoverableError(
-                "No verification role is configured for living minutes, configure it with config command"
+                "Роль верификации не настроена для минут жизни, настройте её с помощью конфига"
             )
 
         if role in ctx.author.roles and verified_role in ctx.author.roles:
-            return await ctx.send("You are already verified")
+            return await ctx.send("Вы уже прошли верификацию")
 
-        message = await ctx.send("Attempting to verify you....")
+        message = await ctx.send("Пытаюсь верифицировать....")
         async with ctx.typing():
 
             if one_time_token:
@@ -400,18 +400,18 @@ class TGverify(BaseCog):
                     # return await message.edit(content=f"Congrats {ctx.author} your verification is complete")
                 else:
                     raise TGRecoverableError(
-                        f"Sorry {ctx.author} it looks like you don't have a ckey linked to this discord account, go back into game and try generating a token! See {instructions_link} for more information. \n\nIf it's still failing after a few tries, ask for support from the verification team, "
+                        f"Извините {ctx.author} похоже, что у вас нет ckey, привязанного к этой учетной записи discord, вернитесь в игру и попробуйте сгенерировать токен! Посмотрите {instructions_link} для подробной информации. \n\nЕсли после нескольких попыток проблема всё ещё остаётся, обратитесь за поддержкой к Founder, "
                     )
 
             log.info(
-                f"Verification request by {ctx.author.id}, for ckey {ckey}, token was: {one_time_token}"
+                f"Запрос на верификацию от {ctx.author.id}, для ckey {ckey}, токен был: {one_time_token}"
             )
             # Now look for the user based on the ckey
             player = await tgdb.get_player_by_ckey(ctx, ckey)
 
             if player is None:
                 raise TGRecoverableError(
-                    f"Sorry {ctx.author} looks like we couldn't look up your user, ask the verification team for support!"
+                    f"Извините {ctx.author} похоже, мы не смогли найти вашего пользователя, обратитесь за поддержкой к Founder!"
                 )
 
             if not prexisting:
@@ -425,17 +425,17 @@ class TGverify(BaseCog):
 
             successful = False
             if role:
-                await ctx.author.add_roles(role, reason="User has verified in game")
+                await ctx.author.add_roles(role, reason="Пользователь прошел верификацию в игре")
             if player["living_time"] >= min_required_living_minutes:
                 successful = True
                 await ctx.author.add_roles(
                     verified_role,
-                    reason="User has verified against their in game living minutes",
+                    reason="Пользователь прошел верификацию в соответствии со своими минутами жизни в игре",
                 )
 
-            fuck = f"Congrats {ctx.author} your verification is complete, but you do not have {min_required_living_minutes} minutes in game as a living crew member (you have {player['living_time']}), so you may not have access to all channels. You can always verify again later by simply doing `?verify` and if you have enough minutes, you will gain access to the remaining channels"
+            fuck = f"Поздравляю {ctx.author} ваша верификация завершена, но у вас не прожито достаточное {min_required_living_minutes} минут в игре за члена экипажа (у вас сейчас {player['living_time']}). Вы всегда можете пройти верификацию повторно, просто написав `$verify`"
             if successful:
-                fuck = f"Congrats {ctx.author} your verification is complete"
+                fuck = f"Поздравляю {ctx.author} верификация завершена"
             return await message.edit(content=fuck, color=0xFF0000)
 
     @verify.error
@@ -443,7 +443,7 @@ class TGverify(BaseCog):
         # Our custom, something recoverable went wrong error type
         if isinstance(error, TGRecoverableError):
             embed = discord.Embed(
-                title=f"Error attempting to verify you:",
+                title=f"Ошибка верификации:",
                 description=f"{format(error)}",
                 color=0xFF0000,
             )
@@ -451,40 +451,40 @@ class TGverify(BaseCog):
 
         elif isinstance(error, commands.MaxConcurrencyReached):
             embed = discord.Embed(
-                title=f"There are too many verifications in process, try again in 30 seconds:",
+                title=f"Слишком много верификаций в текущий момент, попробуйте снова через 30 секунд:",
                 description=f"{format(error)}",
                 color=0xFF0000,
             )
             await ctx.send(content=f"", embed=embed)
             log.exception(
-                f"Too many users attempting to verify concurrently, db wait hit?"
+                f"Слишком много пользователей одновременно пытаются пройти верификацию, ожидание БД нарушено?"
             )
 
         elif isinstance(error, commands.CommandOnCooldown):
             embed = discord.Embed(
-                title=f"Hey slow down buddy:",
+                title=f"Помедленней паренёк:",
                 description=f"{format(error)}",
                 color=0xFF0000,
             )
             await ctx.send(content=f"", embed=embed)
             log.warning(
-                f"Verification limit hit, user is being bad {ctx.author}, discord id {ctx.author.id}"
+                f"Достигнут лимит верификаций, пользователь стал уродцем {ctx.author}, discord id {ctx.author.id}"
             )
 
         elif isinstance(error, commands.NoPrivateMessage):
             embed = discord.Embed(
-                title=f"Wrong channel, bud, leather club is 3 blocks down:",
+                title=f"Неверный канал приятель, качалка ниже:",
                 description=f"{format(error)}",
                 color=0xFF0000,
             )
             await ctx.send(content=f"", embed=embed)
         else:
             # Something went badly wrong, log to the console
-            log.exception("Internal error while verifying a user")
+            log.exception("Внутренняя ошибка во время верификации пользователя")
             # now pretend everything is fine to the user :>
             embed = discord.Embed(
-                title=f"System error occurred",
-                description=f"Ping the @verifier role for assistance",
+                title=f"Произошла системная ошибка",
+                description=f"Попробуйте снова повторить действие",
                 color=0xFF0000,
             )
             await ctx.send(content=f"", embed=embed)
@@ -510,14 +510,14 @@ class TGverify(BaseCog):
         channel = cast(discord.TextChannel, guild.get_channel(channel_id))
         if channel is None:
             log.info(
-                f"tgverify channel not found for guild, it was probably deleted User joined: {member}"
+                f"Система верификации не обнаружила требуемый канал в дискорд-сервере, вероятно, он был удален. Пользователь присоединился: {member}"
             )
             return
 
         if not guild.me.permissions_in(channel).send_messages:
-            log.info(f"Permissions Error. User that joined:{member}")
+            log.info(f"Ошибка доступа. Пользователь, который присоединился:{member}")
             log.info(
-                f"Bot doesn't have permissions to send messages to {guild.name}'s #{channel.name} channel"
+                f"Бот не имеет прав на отправку сообщений в {guild.name}'s #{channel.name} канал"
             )
             return
 
@@ -539,7 +539,7 @@ class TGverify(BaseCog):
         tgdb = self.bot.get_cog("TGDB")
         if not tgdb:
             raise TGUnrecoverableError(
-                "TGDB must exist and be configured for tgverify cog to work"
+                "TGDB должна существовать и быть настроена для работы tgverify cog"
             )
 
         return tgdb
